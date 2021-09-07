@@ -10,13 +10,14 @@ namespace ATM.DataLayer
 {
     public delegate void Notify(object user);
 
-    public class Data
+    public class Data 
     {
         public event Notify IsInFile;
 
         private readonly Logic logic = new Logic();
-        private readonly string adminFile = "admin.txt";
+        //private readonly string adminFile = "admin.txt";
         private readonly string customerFile = "customer.txt";
+        private readonly string userFile = "user.txt";
 
         
         public List<T> ReadFile<T>(string FileName)
@@ -35,13 +36,13 @@ namespace ATM.DataLayer
             return list;
         }
 
-    public void AddtoFile<T>(T obj)
+        public void AddtoFile<T>(T obj)
         {
             
             string jsonOutput = JsonSerializer.Serialize(obj);
-            if (obj is Admin)
+            if (obj is User)
             {
-                File.AppendAllText(Path.Combine(Environment.CurrentDirectory, adminFile), jsonOutput + Environment.NewLine);
+                File.AppendAllText(Path.Combine(Environment.CurrentDirectory, userFile), jsonOutput + Environment.NewLine);
             }
             else if (obj is Customer)
             {
@@ -49,41 +50,40 @@ namespace ATM.DataLayer
             }
         }
 
+        public void IsAdminInFile()
+        {
+            var userList = ReadFile<User>(userFile);
+
+        }
+
+
         public void StartIsInFile(object user)
         {
             
-            var adminList = ReadFile<Admin>(adminFile);
+            var userList = ReadFile<User>(userFile);
             var customerList = ReadFile<Customer>(customerFile);
-           
+            
 
-            if(user is Admin)
-            {
-                foreach (Admin admin in adminList)
+        
+                foreach (User un in userList)
                 {
-                    if (admin.Username == ((Admin)user).Username) //&& admin.Pin == ((Admin)user).Pin has been removed for testing purposes
+                    if (un.Username == ((User)user).Username && un.Pin == ((User)user).Pin && un.IsAdmin == true) //&& admin.Pin == ((Admin)user).Pin has been removed for testing purposes
                     {
-                        OnIsInFile(admin);
-
+                        OnIsInFile(un);
                     }
-                    else continue;
+                    else
+                    {
+                        Customer cus = (Customer)JsonSerializer.Deserialize<User>(JsonSerializer.Serialize((User)user));
+
+                        foreach (Customer customer in customerList)
+                        {
+                            if (customer.Username == cus.Username && customer.Pin == cus.Pin)
+                            {
+                                OnIsInFile(customer);
+                            }
+                        }
+                    }
                 }
-            }    
-            else if (user is Customer)
-            {
-                foreach (Customer customer in customerList)
-                {
-                    if (customer.Username == ((Customer)user).Username && customer.Pin == ((Customer)user).Pin)
-                    {
-                        OnIsInFile(customer);
-                    }
-                    
-                } 
-            }
-            else OnIsInFile(null);
-
-
-
-
 
         }
         protected virtual void OnIsInFile(object user)

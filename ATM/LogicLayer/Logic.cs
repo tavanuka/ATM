@@ -8,36 +8,13 @@ using System.Text.RegularExpressions;
 
 namespace ATM.LogicLayer
 {
-    
+
     class Logic
     {
-        /*
-         public void VerifyLogin(User obj)
-        {
 
-            var user = new Data();
-            
-            user.IsInFile += User_IsInFile;
-            user.StartIsInFile(obj);
+        
 
-            if ((admin = (Admin)user.IsInFile(obj)) is Admin)
-            {
-                return admin;
-            }
-            else if ((customer = (Customer)user.IsInFile(obj)) is Customer)
-            {
-                return customer;
-            }
-            return null;
-           
-           
-        }
-
-        private object User_IsInFile(object user)
-        {
-            return user;
-        }
-    */
+       
         public bool IsValidUsername(string username)
         {
             
@@ -71,49 +48,54 @@ namespace ATM.LogicLayer
             Data data = new Data();
             var customer = new Customer();
             Console.WriteLine("----Creating new Account---");
-            var reset = true;
-            while (reset)
+            data.IsInFile += data_IsInFile;
+        getUsername:
             {
-                
                 Console.Write("Username: ");
                 string un = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(un) || !IsValidUsername(un))
+                if (String.IsNullOrWhiteSpace(un))
                 {
                     Console.WriteLine("Enter a valid username!");
-                    reset = false;
+                    goto getUsername;
                 }
-                else continue;
+                else if (!IsValidUsername(un))
+                {
+                    Console.WriteLine("Please enter a username that contains correct characters.");
+                    goto getUsername;
+                }
+                customer.Username = Encrypt(un);
+            }
+
+        getPin:
+            {
                 string pin = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(pin) || !IsValidPin(pin))
+                if (String.IsNullOrWhiteSpace(pin))
                 {
                     Console.WriteLine("Enter a valid pin!");
-                    reset = false;
+                    goto getPin;
+
                 }
-                else continue;
-                customer.Username = Encrypt(un);
+                else if (!IsValidPin(pin))
+                {
+                    Console.WriteLine("Please enter a digit pin that contains numbers, and is 5 numbers long.");
+                    goto getPin;
+                }
                 customer.Pin = Encrypt(pin);
-
-                data.IsInFile += data_IsInFile;
-                data.StartIsInFile(customer);
             }
-            
 
-
-           // data.AddtoFile();
-
+            data.StartIsInFile(customer);
         }
 
-        public static void data_IsInFile(object user)
+        private void data_IsInFile(object user)
         {
-           if(user is Customer)
+            if(user is null)
             {
-                Console.WriteLine("the password and username already exist!");
-            }
-           else if(user is Admin)
+                Console.WriteLine("test");
+            } else
             {
-                Console.Write("Holders Name: ");
-                Console.ReadLine();
+                Console.WriteLine("good test");
             }
+            
         }
 
         public void DeleteAccount()

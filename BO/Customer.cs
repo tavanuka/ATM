@@ -2,7 +2,7 @@
 
 namespace BO
 {
-    public class Customer
+    public class Customer : User
     {
         private object user;
 
@@ -16,8 +16,8 @@ namespace BO
             this.user = user;
         }
 
-        public string Username { get; set; }
-        public string Pin { get; set; }
+        public override string Username { get; set; }
+        public  override string Pin { get; set; }
         public string Name { get; set; }
         public string accountType { get; set; }
         public int Balance { get; set; }

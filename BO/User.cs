@@ -11,7 +11,8 @@ namespace BO
 
         }
 
-        public string Username { get; set; }
-        public string Pin { get; set; }
+        public virtual string Username { get; set; }
+        public virtual string Pin { get; set; }
+        public virtual bool IsAdmin { get; set; }
     }
 }

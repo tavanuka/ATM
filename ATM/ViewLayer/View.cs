@@ -12,59 +12,69 @@ namespace ATM.ViewLayer
     {
         public void LoginScreen()
         {
-            Console.WriteLine("----BANK OF M8IT---\n\n");
-
+            Console.WriteLine("   ----BANK OF M8IT----\n\n");
+            
             try
             {
                 Logic user = new Logic();
                // Data account = new Data();
                 _ = new Customer();
-                
-                Customer customer;
-            
-                while (true)
-                {
-                    Console.Write("Username: ");
-
-                    var username = Console.ReadLine();
-
-                    Console.Write("Pin: ");
-                    var pass = "";
-                    ConsoleKey key;
-                    do
+                bool isSignedIn = false;
+                    while (!isSignedIn)
                     {
-                        var KeyInfo = Console.ReadKey(intercept: true);
-                        key = KeyInfo.Key;
+                        Console.Write("Username: ");
 
-                        if (key == ConsoleKey.Backspace && pass.Length > 0)
+                        var username = Console.ReadLine();
+
+                        Console.Write("Pin: ");
+                        var pass = "";
+                        ConsoleKey key;
+                        do
                         {
-                            Console.Write("\b \b");
-                            pass = pass[0..^1];
+                            var KeyInfo = Console.ReadKey(intercept: true);
+                            key = KeyInfo.Key;
+
+                            if (key == ConsoleKey.Backspace && pass.Length > 0)
+                            {
+                                Console.Write("\b \b");
+                                pass = pass[0..^1];
+                            }
+                            else if (!char.IsControl(KeyInfo.KeyChar))
+                            {
+                                Console.Write("*");
+                                pass += KeyInfo.KeyChar;
+                            }
                         }
-                        else if (!char.IsControl(KeyInfo.KeyChar))
+                        while (key != ConsoleKey.Enter);
+
+
+                        var userLogin = new User()
+                        { Pin = user.Encrypt(pass), Username = user.Encrypt(username) };
+
+                        Data data = new Data();
+                        data.IsInFile += Data_IsInFile;
+                        data.StartIsInFile(userLogin);
+
+                    Console.Clear();
+                    Console.WriteLine("   ----BANK OF M8IT----\n\n");
+                    Console.WriteLine("\nWrong Username/Pin. Try again!");
+
+                    void Data_IsInFile(object user)
+                    {
+
+                        if (user is User admin && admin.IsAdmin)
                         {
-                            Console.Write("*");
-                            pass += KeyInfo.KeyChar;
+                            AdminScreen();
+                            isSignedIn = true;
+                        }
+                        else if (user is Customer customer)
+                        {
+                            isSignedIn = true;
+                            CustomerScreen(customer, isSignedIn);
+                            
                         }
                     }
-                    while (key != ConsoleKey.Enter);
-
-
-                    var adminLogin = new Admin() 
-                    { Pin = user.Encrypt(pass), Username = user.Encrypt(username) };
-                    var userLogin = new Customer()
-                    { Pin = user.Encrypt(pass), Username = user.Encrypt(username) };
-
-                    Data data = new Data();
-                    data.IsInFile += Data_IsInFile;
-                    data.StartIsInFile(userLogin);
-                    data.StartIsInFile(adminLogin);
-                    break;
-                   /* 
-*/
                 }
-                   
-                
             }
             catch (Exception ex)
             {
@@ -72,27 +82,7 @@ namespace ATM.ViewLayer
             }
         }
 
-        private void Data_IsInFile(object user)
-        {
-            bool isSignedIn = false;
-            if (user is Admin)
-            {
-                isSignedIn = true;
-                AdminScreen();
-            }
-            else if (user is Customer)
-            {
-                isSignedIn = true;
-                CustomerScreen((Customer)user);
-
-            }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine("----BANK OF M8IT---\n\n");
-                Console.WriteLine("\nWrong Username/Pin. Try again!");
-            };
-        }
+        
 
         /* private void DNAnalysis()
          {
@@ -111,7 +101,7 @@ namespace ATM.ViewLayer
              Thread.Sleep(10000);
          }
         */
-        private void CustomerScreen(Customer user)
+        private void CustomerScreen(Customer user, bool signedIn)
         {
             throw new NotImplementedException();
         }
@@ -123,8 +113,8 @@ namespace ATM.ViewLayer
 
             
             Console.Clear();
-            Console.WriteLine("----BANK OF M8IT---");
-            Console.WriteLine("    Administration account\n\n");
+            Console.WriteLine("   ----BANK OF M8IT----");
+            Console.WriteLine("  Administration account\n\n");
             Console.WriteLine("1----Create New Account\n" + 
                               "2----Delete Existing Account\n" +
                               "3----Update Account Information\n" +
@@ -141,7 +131,7 @@ namespace ATM.ViewLayer
                         switch (option)
                         {
                             case "1":
-                                
+                                logic.CreateAccount();
                                 break;
                             case "2":
 

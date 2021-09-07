@@ -5,7 +5,7 @@ using System.Text;
 namespace BO
 {
     
-    public class Admin
+    public class Admin : User
     {
         private object obj;
 
@@ -18,7 +18,7 @@ namespace BO
             this.obj = obj;
         }
 
-        public string Username { get; set; }
-        public string Pin { get; set; }
+        public override string Username { get; set; }
+        public override string Pin { get; set; }
     }
 }
