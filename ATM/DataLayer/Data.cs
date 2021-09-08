@@ -8,18 +8,17 @@ using ATM.LogicLayer;
 
 namespace ATM.DataLayer
 {
-    public delegate void Notify(object user);
 
     public class Data 
     {
-        public event Notify IsInFile;
+        public EventHandler OnVerifyLoginEvent;
 
-        private readonly Logic logic = new Logic();
+        Logic logic = new Logic();
         //private readonly string adminFile = "admin.txt";
         private readonly string customerFile = "customer.txt";
         private readonly string userFile = "user.txt";
-
         
+
         public List<T> ReadFile<T>(string FileName)
         {
             List<T> list = new List<T>();
@@ -49,47 +48,39 @@ namespace ATM.DataLayer
                 File.AppendAllText(Path.Combine(Environment.CurrentDirectory, customerFile), jsonOutput + Environment.NewLine);
             }
         }
-
-        public void IsAdminInFile()
+       
+        public void OnVerifyLogin(User user)
         {
-            var userList = ReadFile<User>(userFile);
-
-        }
-
-
-        public void StartIsInFile(object user)
-        {
+            Logic logic = new Logic();
             
             var userList = ReadFile<User>(userFile);
             var customerList = ReadFile<Customer>(customerFile);
-            
 
-        
+            if (user is User)
+            {
                 foreach (User un in userList)
                 {
-                    if (un.Username == ((User)user).Username && un.Pin == ((User)user).Pin && un.IsAdmin == true) //&& admin.Pin == ((Admin)user).Pin has been removed for testing purposes
+                    if (un.Username == user.Username && un.Pin == user.Pin && un.IsAdmin == true) //&& admin.Pin == ((Admin)user).Pin has been removed for testing purposes
                     {
-                        OnIsInFile(un);
-                    }
-                    else
-                    {
-                        Customer cus = (Customer)JsonSerializer.Deserialize<User>(JsonSerializer.Serialize((User)user));
-
-                        foreach (Customer customer in customerList)
-                        {
-                            if (customer.Username == cus.Username && customer.Pin == cus.Pin)
-                            {
-                                OnIsInFile(customer);
-                            }
-                        }
+                    OnVerifyLoginEvent?.Invoke(this, un);
                     }
                 }
+            }
+            else if (user is Customer)
+            {
+                foreach (Customer customer in customerList)
+                {
+                    if (customer.Username == ((Customer)user).Username && customer.Pin == ((Customer)user).Pin)
+                    {
+                    OnVerifyLoginEvent?.Invoke(this, customer);
+                    }
+                }
+            }
+        }
+       
 
-        }
-        protected virtual void OnIsInFile(object user)
-        {
-            IsInFile?.Invoke(user);
-        }
+       
+
 
     }
 

@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using BO;
 using ATM.DataLayer;
 using System.Text.RegularExpressions;
+using System.Threading;
 
 namespace ATM.LogicLayer
 {
@@ -14,11 +15,12 @@ namespace ATM.LogicLayer
 
         
 
-       
+        
+
         public bool IsValidUsername(string username)
         {
             
-                if (Regex.IsMatch(username, "[a - zA - Z0 - 9]"))
+                if (Regex.IsMatch(username, "[a-zA-Z0-9]"))
                 {
                     return true;
                 }
@@ -47,33 +49,46 @@ namespace ATM.LogicLayer
         {
             Data data = new Data();
             var customer = new Customer();
-            Console.WriteLine("----Creating new Account---");
-            data.IsInFile += data_IsInFile;
-        getUsername:
+            Console.Clear();
+            Console.WriteLine("   ----Creating new Account----");
+        while(true)
             {
+                data.OnVerifyLoginEvent += (s, args) =>
+                {
+                    if (args is User)
+                    {
+                        Console.WriteLine("This admin already exists. Please try again!");
+
+                    }
+                    else if (args is Customer)
+                    {
+                        Console.WriteLine("This customer already exists. Please try again!");
+
+                    }
+                };
+            getUser:
                 Console.Write("Username: ");
                 string un = Console.ReadLine();
                 if (String.IsNullOrWhiteSpace(un))
                 {
                     Console.WriteLine("Enter a valid username!");
-                    goto getUsername;
+                    goto getUser;
                 }
                 else if (!IsValidUsername(un))
                 {
                     Console.WriteLine("Please enter a username that contains correct characters.");
-                    goto getUsername;
+                    goto getUser;
                 }
+                
                 customer.Username = Encrypt(un);
-            }
-
-        getPin:
-            {
+         
+            getPin:
+                Console.Write("Pin: ");
                 string pin = Console.ReadLine();
                 if (String.IsNullOrWhiteSpace(pin))
                 {
                     Console.WriteLine("Enter a valid pin!");
                     goto getPin;
-
                 }
                 else if (!IsValidPin(pin))
                 {
@@ -81,22 +96,12 @@ namespace ATM.LogicLayer
                     goto getPin;
                 }
                 customer.Pin = Encrypt(pin);
+                
+                data.OnVerifyLogin(customer);
             }
-
-            data.StartIsInFile(customer);
         }
 
-        private void data_IsInFile(object user)
-        {
-            if(user is null)
-            {
-                Console.WriteLine("test");
-            } else
-            {
-                Console.WriteLine("good test");
-            }
-            
-        }
+
 
         public void DeleteAccount()
         {

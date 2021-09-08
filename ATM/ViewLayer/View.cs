@@ -52,28 +52,18 @@ namespace ATM.ViewLayer
                         { Pin = user.Encrypt(pass), Username = user.Encrypt(username) };
 
                         Data data = new Data();
-                        data.IsInFile += Data_IsInFile;
-                        data.StartIsInFile(userLogin);
+                        data.OnVerifyLoginEvent += (s, args) =>
+                        {
+                            if(args is User && ((User)args).IsAdmin == true)
+                            {
+                                AdminScreen();
+                            }
+                        };
+                        data.OnVerifyLogin(userLogin);
 
                     Console.Clear();
                     Console.WriteLine("   ----BANK OF M8IT----\n\n");
                     Console.WriteLine("\nWrong Username/Pin. Try again!");
-
-                    void Data_IsInFile(object user)
-                    {
-
-                        if (user is User admin && admin.IsAdmin)
-                        {
-                            AdminScreen();
-                            isSignedIn = true;
-                        }
-                        else if (user is Customer customer)
-                        {
-                            isSignedIn = true;
-                            CustomerScreen(customer, isSignedIn);
-                            
-                        }
-                    }
                 }
             }
             catch (Exception ex)
@@ -82,7 +72,7 @@ namespace ATM.ViewLayer
             }
         }
 
-        
+
 
         /* private void DNAnalysis()
          {
@@ -133,12 +123,15 @@ namespace ATM.ViewLayer
                             case "1":
                                 logic.CreateAccount();
                                 break;
+
                             case "2":
-
+                                logic.DeleteAccount();
                                 break;
+
                             case "3":
-
+                                logic.UpdateAccount();
                                 break;
+
                             case "4":
 
                                 break;

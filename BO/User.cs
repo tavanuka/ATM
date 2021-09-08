@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BO
 {
-    public class User
+    public class User : EventArgs
     {
         public User()
         {
