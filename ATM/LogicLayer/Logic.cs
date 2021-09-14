@@ -59,13 +59,17 @@ namespace ATM.LogicLayer
                     if (args is User)
                     {
                         Console.WriteLine("This admin already exists. Please try again!");
-
+                        Thread.Sleep(1200);
+                        
+                        CreateAccount();
                     }
                     else if (args is Customer)
                     {
                         Console.WriteLine("This customer already exists. Please try again!");
-
+                        Thread.Sleep(1200);
+                        CreateAccount();
                     }
+
                 };
             getUser:
                 Console.Write("Username: ");
@@ -99,6 +103,8 @@ namespace ATM.LogicLayer
                 customer.Pin = Encrypt(pin);
                 
                 data.OnVerifyLogin(customer);
+                
+
             getHolder:
 
                 Console.Write("Holders name: ");
