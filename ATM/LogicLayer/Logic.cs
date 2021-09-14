@@ -49,9 +49,10 @@ namespace ATM.LogicLayer
         {
             Data data = new Data();
             var customer = new Customer();
+            bool loop = true;
             Console.Clear();
             Console.WriteLine("   ----Creating new Account----");
-        while(true)
+        while(loop)
             {
                 data.OnVerifyLoginEvent += (s, args) =>
                 {
@@ -153,15 +154,18 @@ namespace ATM.LogicLayer
                     {
                         case ConsoleKey.D1:
                             customer.Status = true;
-                            continue;
+                            break;
                         case ConsoleKey.D2:
                             customer.Status = false;
-                            continue;
+                            break;
                     }
                 }
                 else
                     goto getAccountStatus;
 
+                customer.accountNumber = data.GetLastAccountNumber();
+                data.AddtoFile(customer);
+                loop = false;
             }
         }
 
