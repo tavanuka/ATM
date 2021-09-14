@@ -76,17 +76,8 @@ namespace ATM.DataLayer
                 }
             }
         }
+       
 
-        public int GetLastAccountNumber()
-        {
-            List<Customer> list = ReadFile<Customer>(customerFile);
-            if (list.Count > 0)
-            {
-                Customer customer = list[list.Count - 1];
-                return customer.accountNumber;
-            }
-            return 0;
-        }
        
 
 
