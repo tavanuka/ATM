@@ -98,6 +98,36 @@ namespace ATM.LogicLayer
                 customer.Pin = Encrypt(pin);
                 
                 data.OnVerifyLogin(customer);
+            getHolder:
+
+                Console.Write("Holders name: ");
+                string holder = Console.ReadLine();
+                if (String.IsNullOrWhiteSpace(holder))
+                {
+                    goto getHolder;
+                }
+
+            
+                Console.WriteLine("Account type: ");
+                Console.Write("1---- Savings\n");
+                Console.Write("2---- Current\n");
+            
+            getAccountType:
+
+                var accountType = "";
+                var pressedKey = Console.ReadKey(intercept: true);
+                var key = pressedKey.Key;
+               
+                if (key == ConsoleKey.D1)
+                {
+                    accountType = "Savings";
+                }
+                else if (key == ConsoleKey.D2)
+                {
+                    accountType = "Current";
+                }
+                else
+                    goto getAccountType;
             }
         }
 

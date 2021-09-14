@@ -13,8 +13,7 @@ namespace ATM.DataLayer
     {
         public EventHandler OnVerifyLoginEvent;
 
-        Logic logic = new Logic();
-        //private readonly string adminFile = "admin.txt";
+        
         private readonly string customerFile = "customer.txt";
         private readonly string userFile = "user.txt";
         

@@ -17,53 +17,52 @@ namespace ATM.ViewLayer
             try
             {
                 Logic user = new Logic();
-               // Data account = new Data();
-                _ = new Customer();
+                Data data = new Data();
+
                 bool isSignedIn = false;
-                    while (!isSignedIn)
+
+                while (!isSignedIn)
+                {
+                    Console.Write("Username: ");
+
+                    var username = Console.ReadLine();
+
+                    Console.Write("Pin: ");
+                    var pass = "";
+                    ConsoleKey key;
+                    do
                     {
-                        Console.Write("Username: ");
+                        var KeyInfo = Console.ReadKey(intercept: true);
+                        key = KeyInfo.Key;
 
-                        var username = Console.ReadLine();
-
-                        Console.Write("Pin: ");
-                        var pass = "";
-                        ConsoleKey key;
-                        do
+                        if (key == ConsoleKey.Backspace && pass.Length > 0)
                         {
-                            var KeyInfo = Console.ReadKey(intercept: true);
-                            key = KeyInfo.Key;
-
-                            if (key == ConsoleKey.Backspace && pass.Length > 0)
-                            {
-                                Console.Write("\b \b");
-                                pass = pass[0..^1];
-                            }
-                            else if (!char.IsControl(KeyInfo.KeyChar))
-                            {
-                                Console.Write("*");
-                                pass += KeyInfo.KeyChar;
-                            }
+                            Console.Write("\b \b");
+                            pass = pass[0..^1];
                         }
-                        while (key != ConsoleKey.Enter);
-
-
-                        var userLogin = new User()
-                        { Pin = user.Encrypt(pass), Username = user.Encrypt(username) };
-
-                        Data data = new Data();
-                        data.OnVerifyLoginEvent += (s, args) =>
+                        else if (!char.IsControl(KeyInfo.KeyChar))
                         {
-                            if(args is User && ((User)args).IsAdmin == true)
-                            {
-                                AdminScreen();
-                            }
-                        };
-                        data.OnVerifyLogin(userLogin);
+                            Console.Write("*");
+                            pass += KeyInfo.KeyChar;
+                        }
+                    }
+                    while (key != ConsoleKey.Enter);
 
-                    Console.Clear();
-                    Console.WriteLine("   ----BANK OF M8IT----\n\n");
-                    Console.WriteLine("\nWrong Username/Pin. Try again!");
+                    var userLogin = new User()
+                    { Pin = user.Encrypt(pass), Username = user.Encrypt(username) };
+                    
+                    data.OnVerifyLoginEvent += (s, args) =>
+                    {
+                        if (args is User && ((User)args).IsAdmin == true)
+                        {
+                            AdminScreen();
+                        }
+                    };
+                    data.OnVerifyLogin(userLogin);
+
+                Console.Clear();
+                Console.WriteLine("   ----BANK OF M8IT----\n\n");
+                Console.WriteLine("\nWrong Username/Pin. Try again!");
                 }
             }
             catch (Exception ex)
@@ -98,8 +97,8 @@ namespace ATM.ViewLayer
 
         private void AdminScreen()
         {
-            AdminScreen:
-            {
+            Logic logic = new Logic();
+
 
             
             Console.Clear();
@@ -111,13 +110,46 @@ namespace ATM.ViewLayer
                               "4----Search for Account\n" +
                               "5----View Reports\n\n" + 
                               "6----Exit");
-
-                try
+        adminScreen:
+            try
                 {
-                    string option = Console.ReadLine();
+                
+                    var keyPressed = Console.ReadKey(intercept: true);
+                    var key = keyPressed.Key;
+
+                    if(key == ConsoleKey.D1 || key == ConsoleKey.D2|| key == ConsoleKey.D3|| key == ConsoleKey.D4 || key == ConsoleKey.D5|| key == ConsoleKey.D6)
+                    {
+                        switch (key)
+                        {
+                            case ConsoleKey.D1:
+                                logic.CreateAccount();
+                                break;
+                            case ConsoleKey.D2:
+                                logic.DeleteAccount();
+                                break;
+                            case ConsoleKey.D3:
+                                logic.UpdateAccount();
+                            break;
+                            case ConsoleKey.D4:
+                                break;
+                            case ConsoleKey.D5:
+                                break;
+                            case ConsoleKey.D6:
+                            System.Environment.Exit(0);
+                            break;
+                        }
+                    }
+                    else
+                    {
+                        goto adminScreen;
+                    }
+
+
+                    /*
+                     string option = Console.ReadLine();
                     if(option == "1" || option == "2" || option == "3" || option == "4" || option == "5" || option == "6")
                     {
-                        Logic logic = new Logic();
+                        
                         switch (option)
                         {
                             case "1":
@@ -125,7 +157,7 @@ namespace ATM.ViewLayer
                                 break;
 
                             case "2":
-                                logic.DeleteAccount();
+                                
                                 break;
 
                             case "3":
@@ -139,7 +171,7 @@ namespace ATM.ViewLayer
 
                                 break;
                             case "6":
-                                System.Environment.Exit(0);
+                                
                                 break;
                         }
 
@@ -149,14 +181,14 @@ namespace ATM.ViewLayer
                         Console.WriteLine("Wrong input!");
                         goto AdminScreen;
                     }
-                    
 
+*/
                 }
                 catch(Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
-            }
+            
         }
     }
 }
