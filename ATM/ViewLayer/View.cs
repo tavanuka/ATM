@@ -99,25 +99,30 @@ namespace ATM.ViewLayer
         {
             Logic logic = new Logic();
 
-
-            
-            Console.Clear();
-            Console.WriteLine("   ----BANK OF M8IT----");
-            Console.WriteLine("  Administration account\n\n");
-            Console.WriteLine("1----Create New Account\n" + 
-                              "2----Delete Existing Account\n" +
-                              "3----Update Account Information\n" +
-                              "4----Search for Account\n" +
-                              "5----View Reports\n\n" + 
-                              "6----Exit");
-        adminScreen:
-            try
-                {
+            ConsoleKey key;
+            do
+            {
                 
-                    var keyPressed = Console.ReadKey(intercept: true);
-                    var key = keyPressed.Key;
 
-                    if(key == ConsoleKey.D1 || key == ConsoleKey.D2|| key == ConsoleKey.D3|| key == ConsoleKey.D4 || key == ConsoleKey.D5|| key == ConsoleKey.D6)
+                Console.Clear();
+                Console.WriteLine("   ----BANK OF M8IT----");
+                Console.WriteLine("  Administration account\n\n");
+                Console.WriteLine("1----Create New Account\n" +
+                                  "2----Delete Existing Account\n" +
+                                  "3----Update Account Information\n" +
+                                  "4----Search for Account\n" +
+                                  "5----View Reports\n\n" +
+                                  "6----Exit");
+
+                var keyPressed = Console.ReadKey(intercept: true);
+                key = keyPressed.Key;
+            adminScreen:
+                try
+                {
+
+                    
+
+                    if (key == ConsoleKey.D1 || key == ConsoleKey.D2 || key == ConsoleKey.D3 || key == ConsoleKey.D4 || key == ConsoleKey.D5 || key == ConsoleKey.D6)
                     {
                         switch (key)
                         {
@@ -129,20 +134,29 @@ namespace ATM.ViewLayer
                                 break;
                             case ConsoleKey.D3:
                                 logic.UpdateAccount();
-                            break;
+                                break;
                             case ConsoleKey.D4:
                                 break;
                             case ConsoleKey.D5:
                                 break;
                             case ConsoleKey.D6:
-                            System.Environment.Exit(0);
-                            break;
+                                System.Environment.Exit(0);
+                                break;
                         }
                     }
                     else
                     {
                         goto adminScreen;
                     }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                    Thread.Sleep(600);
+                }
+            }
+            while (key != ConsoleKey.D6);
+
 
 
                     /*
@@ -183,12 +197,8 @@ namespace ATM.ViewLayer
                     }
 
 */
-                }
-                catch(Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-            
+
+
         }
     }
 }
