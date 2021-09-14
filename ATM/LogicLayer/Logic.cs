@@ -101,8 +101,8 @@ namespace ATM.LogicLayer
             getHolder:
 
                 Console.Write("Holders name: ");
-                string holder = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(holder))
+                customer.Name  = Console.ReadLine();
+                if (String.IsNullOrWhiteSpace(customer.Name))
                 {
                     goto getHolder;
                 }
@@ -114,20 +114,33 @@ namespace ATM.LogicLayer
             
             getAccountType:
 
-                var accountType = "";
                 var pressedKey = Console.ReadKey(intercept: true);
                 var key = pressedKey.Key;
                
                 if (key == ConsoleKey.D1)
                 {
-                    accountType = "Savings";
+                    customer.accountType = "Savings";
                 }
                 else if (key == ConsoleKey.D2)
                 {
-                    accountType = "Current";
+                    customer.accountType = "Current";
                 }
                 else
                     goto getAccountType;
+
+               getBalance:
+                Console.WriteLine("Starting Balance: ");
+                try
+                {
+                    customer.Balance = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (Exception )
+                {
+                    Console.WriteLine("Please enter a correct value!");
+                    goto getBalance;
+                }
+                 
+
             }
         }
 
