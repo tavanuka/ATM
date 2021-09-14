@@ -139,7 +139,28 @@ namespace ATM.LogicLayer
                     Console.WriteLine("Please enter a correct value!");
                     goto getBalance;
                 }
-                 
+
+                Console.WriteLine("Account status:");
+                Console.WriteLine("1---- Active \n2---- Disabled");
+
+               getAccountStatus:
+                pressedKey = Console.ReadKey(intercept: true);
+                key = pressedKey.Key;
+
+                if (key == ConsoleKey.D1 || key == ConsoleKey.D2)
+                {
+                    switch (key)
+                    {
+                        case ConsoleKey.D1:
+                            customer.Status = true;
+                            continue;
+                        case ConsoleKey.D2:
+                            customer.Status = false;
+                            continue;
+                    }
+                }
+                else
+                    goto getAccountStatus;
 
             }
         }
