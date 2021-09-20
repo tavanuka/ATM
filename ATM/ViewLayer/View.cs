@@ -53,7 +53,7 @@ namespace ATM.ViewLayer
                     
                     data.OnIsInFileEvent += (s, args) =>
                     {
-                        if (args is User && ((User)args).IsAdmin == true)
+                        if (args is User user && user.IsAdmin)
                         {
                             AdminScreen();
                         }
@@ -91,7 +91,7 @@ namespace ATM.ViewLayer
              Thread.Sleep(10000);
          }
         */
-        private void CustomerScreen(Customer user, bool signedIn)
+        private void CustomerScreen(User user, bool signedIn)
         {
             throw new NotImplementedException();
         }
