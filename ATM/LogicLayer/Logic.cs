@@ -170,7 +170,7 @@ namespace ATM.LogicLayer
                     goto getAccountStatus;
 
                 customer.accountNumber = data.GetLastAccountNumber();
-                data.AddtoFile(customer);
+                data.AddtoFile<Customer>(customer);
                 loop = false;
             }
         }

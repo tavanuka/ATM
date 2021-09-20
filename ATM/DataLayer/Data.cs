@@ -34,7 +34,7 @@ namespace ATM.DataLayer
             return list;
         }
 
-        public void AddtoFile<T>(T obj)
+        public void AddtoFile<T>(object obj)
         {
             
             string jsonOutput = JsonSerializer.Serialize(obj);

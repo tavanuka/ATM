@@ -102,8 +102,8 @@ namespace ATM.ViewLayer
             ConsoleKey key;
             do
             {
-                
 
+            adminScreen:
                 Console.Clear();
                 Console.WriteLine("   ----BANK OF M8IT----");
                 Console.WriteLine("  Administration account\n\n");
@@ -113,7 +113,7 @@ namespace ATM.ViewLayer
                                   "4----Search for Account\n" +
                                   "5----View Reports\n\n" +
                                   "6----Exit");
-            adminScreen:
+            
                 var keyPressed = Console.ReadKey(intercept: true);
                 key = keyPressed.Key;
             
