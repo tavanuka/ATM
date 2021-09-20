@@ -34,7 +34,7 @@ namespace ATM.DataLayer
             return list;
         }
 
-        public void AddtoFile<T>(object obj)
+        public void AddtoFile<T>(T obj)
         {
             
             string jsonOutput = JsonSerializer.Serialize(obj);
@@ -48,7 +48,7 @@ namespace ATM.DataLayer
             }
         }
        
-        public void OnVerifyLogin(User user)
+        public void OnVerifyLogin(object user)
         {
             Logic logic = new Logic();
             
@@ -59,7 +59,7 @@ namespace ATM.DataLayer
             {
                 foreach (User un in userList)
                 {
-                    if (un.Username == user.Username && un.Pin == user.Pin && un.IsAdmin == true) //&& admin.Pin == ((Admin)user).Pin has been removed for testing purposes
+                    if (un.Username == ((User)user).Username && un.Pin == ((User)user).Pin && un.IsAdmin == true) //&& admin.Pin == ((Admin)user).Pin has been removed for testing purposes
                     {
                     OnVerifyLoginEvent?.Invoke(this, un);
                     }

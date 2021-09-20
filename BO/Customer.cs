@@ -1,12 +1,13 @@
-﻿using System;
+﻿using ATM.LogicLayer;
+using System;
 
 namespace BO
 {
-    public class Customer 
+    public class Customer : EventArgs, IUser
     {
         private object user;
 
-        public Customer()
+        public Customer() 
         {
          
         }

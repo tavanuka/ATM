@@ -8,6 +8,5 @@ namespace ATM.LogicLayer
     {
         string Name { get; set; }
         string Pin { get; set;  }
-        bool IsAdmin { get; set; }
     }
 }
