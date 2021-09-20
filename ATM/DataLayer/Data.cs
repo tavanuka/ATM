@@ -12,6 +12,7 @@ namespace ATM.DataLayer
     public class Data 
     {
         public EventHandler OnVerifyLoginEvent;
+        public EventHandler OnIsInFileEvent;
 
         
         private readonly string customerFile = "customer.txt";
@@ -47,34 +48,48 @@ namespace ATM.DataLayer
                 File.AppendAllText(Path.Combine(Environment.CurrentDirectory, customerFile), jsonOutput + Environment.NewLine);
             }
         }
-       
-        public void OnVerifyLogin(object user)
+
+        //public void OnVerifyLogin(object user)
+        //{
+        //    Logic logic = new Logic();
+
+        //    var userList = ReadFile<User>(userFile);
+        //    var customerList = ReadFile<Customer>(customerFile);
+
+        //    if (user is User)
+        //    {
+        //        foreach (User un in userList)
+        //        {
+        //            if (un.Username == ((User)user).Username && un.Pin == ((User)user).Pin && un.IsAdmin == true) //&& admin.Pin == ((Admin)user).Pin has been removed for testing purposes
+        //            {
+        //                OnVerifyLoginEvent?.Invoke(this, un);
+        //            }
+        //        }
+        //    }
+        //    else if (user is Customer)
+        //    {
+        //        foreach (Customer customer in customerList)
+        //        {
+        //            if (customer.Username == ((Customer)user).Username && customer.Pin == ((Customer)user).Pin)
+        //            {
+        //                OnVerifyLoginEvent?.Invoke(this, customer);
+        //            }
+        //        }
+        //    }
+        //}
+
+        public void OnIsInFile(User user)
         {
-            Logic logic = new Logic();
-            
             var userList = ReadFile<User>(userFile);
             var customerList = ReadFile<Customer>(customerFile);
-
-            if (user is User)
+            foreach (User un in userList)
             {
-                foreach (User un in userList)
+                if (un.Username == user.Username && un.Pin == user.Pin)
                 {
-                    if (un.Username == ((User)user).Username && un.Pin == ((User)user).Pin && un.IsAdmin == true) //&& admin.Pin == ((Admin)user).Pin has been removed for testing purposes
-                    {
-                    OnVerifyLoginEvent?.Invoke(this, un);
-                    }
+                    OnIsInFileEvent?.Invoke(this, un);
                 }
             }
-            else if (user is Customer)
-            {
-                foreach (Customer customer in customerList)
-                {
-                    if (customer.Username == ((Customer)user).Username && customer.Pin == ((Customer)user).Pin)
-                    {
-                    OnVerifyLoginEvent?.Invoke(this, customer);
-                    }
-                }
-            }
+            
         }
 
         public int GetLastAccountNumber()

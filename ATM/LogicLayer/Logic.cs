@@ -49,27 +49,22 @@ namespace ATM.LogicLayer
         {
             Data data = new Data();
             var customer = new Customer();
+            var user = new User();
             bool loop = true;
             Console.Clear();
             Console.WriteLine("   ----Creating new Account----");
         while(loop)
             {
-                data.OnVerifyLoginEvent += (s, args) =>
+                data.OnIsInFileEvent += (s, args) =>
                 {
                     if (args is User)
                     {
-                        Console.WriteLine("This admin already exists. Please try again!");
+                        Console.WriteLine("This user already exists. Please try again!");
                         Thread.Sleep(1200);
                         
                         CreateAccount();
                     }
-                    else if (args is Customer)
-                    {
-                        Console.WriteLine("This customer already exists. Please try again!");
-                        Thread.Sleep(1200);
-                        CreateAccount();
-                    }
-
+                    
                 };
             getUser:
                 Console.Write("Username: ");
@@ -85,7 +80,7 @@ namespace ATM.LogicLayer
                     goto getUser;
                 }
                 
-                customer.Username = Encrypt(un);
+                user.Username = Encrypt(un);
          
             getPin:
                 Console.Write("Pin: ");
@@ -100,9 +95,10 @@ namespace ATM.LogicLayer
                     Console.WriteLine("Please enter a digit pin that contains numbers, and is 5 numbers long.");
                     goto getPin;
                 }
-                customer.Pin = Encrypt(pin);
-                
-                data.OnVerifyLogin(customer);
+                user.Pin = Encrypt(pin);
+
+                data.OnIsInFile(user);
+                //data.OnVerifyLogin(customer);
                 
 
             getHolder:
@@ -170,6 +166,8 @@ namespace ATM.LogicLayer
                     goto getAccountStatus;
 
                 customer.accountNumber = data.GetLastAccountNumber();
+                user.accountNumber = customer.accountNumber;
+                data.AddtoFile<User>(user);
                 data.AddtoFile<Customer>(customer);
                 loop = false;
             }

@@ -51,14 +51,15 @@ namespace ATM.ViewLayer
                     var userLogin = new User()
                     { Pin = user.Encrypt(pass), Username = user.Encrypt(username) };
                     
-                    data.OnVerifyLoginEvent += (s, args) =>
+                    data.OnIsInFileEvent += (s, args) =>
                     {
                         if (args is User && ((User)args).IsAdmin == true)
                         {
                             AdminScreen();
                         }
                     };
-                    data.OnVerifyLogin(userLogin);
+                    //data.OnVerifyLogin(userLogin);
+                    data.OnIsInFile(userLogin);
 
                 Console.Clear();
                 Console.WriteLine("   ----BANK OF M8IT----\n\n");
