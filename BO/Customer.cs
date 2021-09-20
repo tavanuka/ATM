@@ -2,7 +2,7 @@
 
 namespace BO
 {
-    public class Customer : EventArgs, IUser
+    public class Customer : EventArgs
     {
         private object user;
 
@@ -16,8 +16,7 @@ namespace BO
             this.user = user;
         }
 
-        public string Username { get; set; }
-        public string Pin { get; set; }
+
         public string Name { get; set; }
         public string accountType { get; set; }
         public int Balance { get; set; }
