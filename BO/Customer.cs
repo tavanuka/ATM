@@ -1,5 +1,4 @@
-﻿using ATM.LogicLayer;
-using System;
+﻿using System;
 
 namespace BO
 {
