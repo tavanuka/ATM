@@ -10,7 +10,7 @@ using System.Threading;
 namespace ATM.LogicLayer
 {
 
-    class Logic
+    public class Logic
     {
 
         

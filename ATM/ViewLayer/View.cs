@@ -113,10 +113,10 @@ namespace ATM.ViewLayer
                                   "4----Search for Account\n" +
                                   "5----View Reports\n\n" +
                                   "6----Exit");
-
+            adminScreen:
                 var keyPressed = Console.ReadKey(intercept: true);
                 key = keyPressed.Key;
-            adminScreen:
+            
                 try
                 {
 
@@ -128,7 +128,7 @@ namespace ATM.ViewLayer
                         {
                             case ConsoleKey.D1:
                                 logic.CreateAccount();
-                                break;
+                                goto adminScreen;
                             case ConsoleKey.D2:
                                 logic.DeleteAccount();
                                 break;
@@ -156,49 +156,6 @@ namespace ATM.ViewLayer
                 }
             }
             while (key != ConsoleKey.D6);
-
-
-
-                    /*
-                     string option = Console.ReadLine();
-                    if(option == "1" || option == "2" || option == "3" || option == "4" || option == "5" || option == "6")
-                    {
-                        
-                        switch (option)
-                        {
-                            case "1":
-                                logic.CreateAccount();
-                                break;
-
-                            case "2":
-                                
-                                break;
-
-                            case "3":
-                                logic.UpdateAccount();
-                                break;
-
-                            case "4":
-
-                                break;
-                            case "5":
-
-                                break;
-                            case "6":
-                                
-                                break;
-                        }
-
-                    }
-                    else
-                    {
-                        Console.WriteLine("Wrong input!");
-                        goto AdminScreen;
-                    }
-
-*/
-
-
         }
     }
 }
