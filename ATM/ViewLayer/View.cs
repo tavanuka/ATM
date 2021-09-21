@@ -10,6 +10,7 @@ namespace ATM.ViewLayer
 {
     public class View
     {
+        //initializes the login method
         public void LoginScreen()
         {
             Console.WriteLine("   ----BANK OF M8IT----\n\n");
@@ -19,6 +20,7 @@ namespace ATM.ViewLayer
                 Logic user = new Logic();
                 Data data = new Data();
 
+                //what?
                 bool isSignedIn = false;
 
                 while (!isSignedIn)
@@ -28,6 +30,8 @@ namespace ATM.ViewLayer
                     var username = Console.ReadLine();
 
                     Console.Write("Pin: ");
+
+                    //Password acquisition, character masking, and checking for correct characters
                     var pass = "";
                     ConsoleKey key;
                     do
@@ -48,22 +52,25 @@ namespace ATM.ViewLayer
                     }
                     while (key != ConsoleKey.Enter);
 
+                    //assignment of new object User with encryption
                     var userLogin = new User()
                     { Pin = user.Encrypt(pass), Username = user.Encrypt(username) };
                     
+                    //event subscriber and lambda expression if account is in file
                     data.OnIsInFileEvent += (s, args) =>
                     {
                         if (args is User user && user.IsAdmin)
                         {
                             AdminScreen();
                         }
-                        else //(args is User customer && !customer.IsAdmin)
+                        else if (args is User customer && !customer.IsAdmin)
                         {
                             
                             CustomerScreen((User)args, true);
                         }
                     };
-                    //data.OnVerifyLogin(userLogin);
+
+                    //event trigger to see if user exists in the repository
                     data.OnIsInFile(userLogin);
 
                 Console.Clear();
@@ -73,6 +80,7 @@ namespace ATM.ViewLayer
             }
             catch (Exception ex)
             {
+                //catches any sort of error and logs it
                 Console.WriteLine("\n{0}",ex.Message);
             }
         }
@@ -96,8 +104,13 @@ namespace ATM.ViewLayer
              Thread.Sleep(10000);
          }
         */
+
+        //Customer screen method
         private void CustomerScreen(User user, bool signedIn)
         {
+
+            //implement checking if account is disabled on this line 
+
             ConsoleKey key;
             user.IsSignedIn = signedIn;
 
@@ -110,13 +123,15 @@ namespace ATM.ViewLayer
                                   "4----Display Balance\n" +
                                   "5----Exit");
 
-            
+            //loops while user is logged 
             do
             {
                 var keyPressed = Console.ReadKey(intercept: true);
                 key = keyPressed.Key;
                 if (key == ConsoleKey.D1 || key == ConsoleKey.D2 || key == ConsoleKey.D3 || key == ConsoleKey.D4 || key == ConsoleKey.D5 )
                 {
+
+                    //switch statement related to menu selection of the digits corelated to the numbers on the keyboard
                     switch (key)
                     {
                         case ConsoleKey.D1:
@@ -143,6 +158,7 @@ namespace ATM.ViewLayer
             } while (user.IsSignedIn is false);
         }
 
+        //Administration screen method 
         private void AdminScreen()
         {
             Logic logic = new Logic();
@@ -172,6 +188,7 @@ namespace ATM.ViewLayer
 
                     if (key == ConsoleKey.D1 || key == ConsoleKey.D2 || key == ConsoleKey.D3 || key == ConsoleKey.D4 || key == ConsoleKey.D5 || key == ConsoleKey.D6)
                     {
+                        //same switch statement as used in CustomerScreen() with extra parameters due to it being Administration panel
                         switch (key)
                         {
                             case ConsoleKey.D1:
@@ -203,6 +220,7 @@ namespace ATM.ViewLayer
                     Thread.Sleep(600);
                 }
             }
+            // loops until number 6 is pressed
             while (key != ConsoleKey.D6);
         }
     }

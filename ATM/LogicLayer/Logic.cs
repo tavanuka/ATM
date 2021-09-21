@@ -16,7 +16,7 @@ namespace ATM.LogicLayer
         
 
         
-
+        //User validation method that uses Regular expression to determine if the string is in correct format
         public bool IsValidUsername(string username)
         {
             
@@ -30,6 +30,7 @@ namespace ATM.LogicLayer
                 }
         }
 
+        //Password validation method that uses the same algorithm as IsValidUsername to determine if the varaible is in correct format 
         public bool IsValidPin(string pin)
         {
 
@@ -44,18 +45,24 @@ namespace ATM.LogicLayer
             return false;
         }
 
-
+        //Administration method to initialize account creation
         public void CreateAccount()
         {
+            //initialization of classes for method usage
             Data data = new Data();
+            var get = new UserCreation();
+
+            //Initialization of objects 
             var customer = new Customer();
             var user = new User();
-            var get = new UserCreation();
+
             Console.Clear();
             Console.WriteLine("   ----Creating new Account----");
 
         while(true)
             {
+
+                //Event Subscriber that triggers if the given username already exists
                 data.OnIsInFileEvent += (s, args) =>
                 {
                     if (args is User)
@@ -68,24 +75,34 @@ namespace ATM.LogicLayer
                     
                 };
 
+                //User() assignment and encryption with AES 
                 user.Username = Encrypt(get.User());
-         
                 user.Pin = Encrypt(get.Pin());
 
+                //Trigger to check if user actually exists in the database
                 data.OnIsInFile(user);
 
+                //Validation and assignment of the User if the account will be an admin or not.
+                // if true, it will directly write the credentials and exit the loop, as no further data is needed
                 if ((user.IsAdmin = get.CustomerAccountType()))
                 {
                     data.AddtoFile<User>(user);
+                    break;
                 }
 
+                //object Customer() variables assignment through class UserCreation
                 customer.Name = get.Holder();
                 customer.accountType = get.AccountType();
                 customer.Balance = get.Balance();
                 customer.Status = get.AccountStatus();
 
+                //ID assignment. Due to login credentials and customer data being created in two different repositories,
+                //it is necessary to link them with some sort of identifier for lookup. All of this provides easier data 
+                //manipulation and integrity to the framework 
                 customer.accountNumber = data.GetLastAccountNumber();
                 user.accountNumber = customer.accountNumber;
+
+                //Writing the customer to file(s)
                 data.AddtoFile<User>(user);
                 data.AddtoFile<Customer>(customer);
                 break;
@@ -105,11 +122,16 @@ namespace ATM.LogicLayer
         }
 
 
+        //Encryption method that takes parameter of string.
         public string Encrypt(string text)
         {
+            //sets the given string to a byte stream
             var b = Encoding.UTF8.GetBytes(text);
+
+            //encrypts via fetching GetAes(), creating an encryptor, etc
             var encrypted = GetAes().CreateEncryptor().TransformFinalBlock(b, 0, b.Length);
 
+            //returns encrypted string to the source 
             return Convert.ToBase64String(encrypted);
             
         }
@@ -122,13 +144,21 @@ namespace ATM.LogicLayer
             return Encoding.UTF8.GetString(decrypted);
         }
 
+        //AES init
         private Aes GetAes()
         {
             try
             {
+                //assignment of a public key with an array of 16 bytes
                 var publickey = new Byte[16];
+
+                //secret key assignment. Hardcoded for now 
                 string secretkey = "novak"; //make it connect to SQL to read secret key, but who the fuck needs this now?
+
+                //converting the secret key to byte encoding 
                 var skeyByte = Encoding.UTF8.GetBytes(secretkey);
+                
+                //copies all the bytes in the private key into the public key, and sets length with math.min
                 Array.Copy(skeyByte, publickey, Math.Min(publickey.Length, skeyByte.Length));
                 Aes aes = Aes.Create();
 

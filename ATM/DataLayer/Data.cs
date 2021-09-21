@@ -11,6 +11,7 @@ namespace ATM.DataLayer
 
     public class Data 
     {
+        //Event handlers and providers 
         public EventHandler OnVerifyLoginEvent;
         public EventHandler OnIsInFileEvent;
 
@@ -18,7 +19,7 @@ namespace ATM.DataLayer
         private readonly string customerFile = "customer.txt";
         private readonly string userFile = "user.txt";
         
-
+        //Reads a file according to the provided object type 
         public List<T> ReadFile<T>(string FileName)
         {
             List<T> list = new List<T>();
@@ -35,6 +36,7 @@ namespace ATM.DataLayer
             return list;
         }
 
+        //Adds the given account type to the right database
         public void AddtoFile<T>(T obj)
         {
             
@@ -78,6 +80,7 @@ namespace ATM.DataLayer
         //    }
         //}
 
+        //Method to check if the account exists in the repository
         public void OnIsInFile(User user)
         {
             var userList = ReadFile<User>(userFile);
@@ -92,6 +95,8 @@ namespace ATM.DataLayer
             
         }
 
+        //Gets the account number for the new assignment.
+        // should be used only as creating new accounts!!
         public int GetLastAccountNumber()
         {
             List<Customer> list = ReadFile<Customer>(customerFile);
