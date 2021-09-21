@@ -50,10 +50,11 @@ namespace ATM.LogicLayer
             Data data = new Data();
             var customer = new Customer();
             var user = new User();
-            bool loop = true;
+            var get = new UserCreation();
             Console.Clear();
             Console.WriteLine("   ----Creating new Account----");
-        while(loop)
+
+        while(true)
             {
                 data.OnIsInFileEvent += (s, args) =>
                 {
@@ -66,131 +67,28 @@ namespace ATM.LogicLayer
                     }
                     
                 };
-            getUser:
-                Console.Write("Username: ");
-                string un = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(un))
-                {
-                    Console.WriteLine("Enter a valid username!");
-                    goto getUser;
-                }
-                else if (!IsValidUsername(un))
-                {
-                    Console.WriteLine("Please enter a username that contains correct characters.");
-                    goto getUser;
-                }
-                
-                user.Username = Encrypt(un);
+
+                user.Username = Encrypt(get.User());
          
-            getPin:
-                Console.Write("Pin: ");
-                string pin = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(pin))
-                {
-                    Console.WriteLine("Enter a valid pin!");
-                    goto getPin;
-                }
-                else if (!IsValidPin(pin))
-                {
-                    Console.WriteLine("Please enter a digit pin that contains numbers, and is 5 numbers long.");
-                    goto getPin;
-                }
-                user.Pin = Encrypt(pin);
+                user.Pin = Encrypt(get.Pin());
 
                 data.OnIsInFile(user);
-                //data.OnVerifyLogin(customer);
 
-                Console.WriteLine("User account type: ");
-                Console.Write("1---- User\n");
-                Console.Write("2---- Admin\n");
-
-            getUserType:
-
-                var pressedKey = Console.ReadKey(intercept: true);
-                var key = pressedKey.Key;
-
-                if (key == ConsoleKey.D1)
+                if ((user.IsAdmin = get.CustomerAccountType()))
                 {
-                    user.IsAdmin = false;
-                }
-                else if (key == ConsoleKey.D2)
-                {
-                    user.IsAdmin = true;
                     data.AddtoFile<User>(user);
-                    loop = false;
-                }
-                else
-                    goto getUserType;
-
-                getHolder:
-
-                Console.Write("Holders name: ");
-                customer.Name  = Console.ReadLine();
-                if (String.IsNullOrWhiteSpace(customer.Name))
-                {
-                    goto getHolder;
                 }
 
-            
-                Console.WriteLine("Account type: ");
-                Console.Write("1---- Savings\n");
-                Console.Write("2---- Current\n");
-            
-            getAccountType:
-
-                pressedKey = Console.ReadKey(intercept: true);
-                key = pressedKey.Key;
-               
-                if (key == ConsoleKey.D1)
-                {
-                    customer.accountType = "Savings";
-                }
-                else if (key == ConsoleKey.D2)
-                {
-                    customer.accountType = "Current";
-                }
-                else
-                    goto getAccountType;
-
-               getBalance:
-                Console.WriteLine("Starting Balance: ");
-                try
-                {
-                    customer.Balance = Convert.ToInt32(Console.ReadLine());
-                }
-                catch (Exception )
-                {
-                    Console.WriteLine("Please enter a correct value!");
-                    goto getBalance;
-                }
-
-                Console.WriteLine("Account status:");
-                Console.WriteLine("1---- Active \n2---- Disabled");
-
-               getAccountStatus:
-                pressedKey = Console.ReadKey(intercept: true);
-                key = pressedKey.Key;
-
-                if (key == ConsoleKey.D1 || key == ConsoleKey.D2)
-                {
-                    switch (key)
-                    {
-                        case ConsoleKey.D1:
-                            customer.Status = true;
-                            break;
-                        case ConsoleKey.D2:
-                            customer.Status = false;
-                            break;
-                    }
-                }
-                else
-                    goto getAccountStatus;
+                customer.Name = get.Holder();
+                customer.accountType = get.AccountType();
+                customer.Balance = get.Balance();
+                customer.Status = get.AccountStatus();
 
                 customer.accountNumber = data.GetLastAccountNumber();
                 user.accountNumber = customer.accountNumber;
                 data.AddtoFile<User>(user);
                 data.AddtoFile<Customer>(customer);
-                loop = false;
+                break;
             }
         }
 
