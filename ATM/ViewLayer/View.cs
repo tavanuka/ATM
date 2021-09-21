@@ -57,6 +57,11 @@ namespace ATM.ViewLayer
                         {
                             AdminScreen();
                         }
+                        else //(args is User customer && !customer.IsAdmin)
+                        {
+                            
+                            CustomerScreen((User)args, true);
+                        }
                     };
                     //data.OnVerifyLogin(userLogin);
                     data.OnIsInFile(userLogin);
