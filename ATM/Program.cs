@@ -19,7 +19,7 @@ namespace ATM
 
             // add.AddtoFile(admin);
             //logic.FileEncryption(add.GetFilePath("customer.txt"),add.GetFilePath("encrypted.key"));
-            logic.FileDecryption(add.GetFilePath("encrypted.key"), add.GetFilePath("customer_decrypted.txt"), "bm92YWsAAAAAAAAAAAAAAA==");
+            //logic.FileDecryption(add.GetFilePath("encrypted.key"), add.GetFilePath("customer_decrypted.txt"), "bm92YWsAAAAAAAAAAAAAAA==");
             View Login = new View();
 
             Login.LoginScreen();
