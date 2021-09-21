@@ -18,12 +18,18 @@ namespace ATM.DataLayer
         
         private readonly string customerFile = "customer.txt";
         private readonly string userFile = "user.txt";
-        
+
+        //Helper method to get current file path
+        private string GetFilePath(string filePath)
+        {
+            return Path.Combine(Environment.CurrentDirectory, filePath);
+        }
+
         //Reads a file according to the provided object type 
         public List<T> ReadFile<T>(string FileName)
         {
             List<T> list = new List<T>();
-            string FilePath = Path.Combine(Environment.CurrentDirectory, FileName);
+            string FilePath = GetFilePath(FileName);
             StreamReader sr = new StreamReader(FilePath);
 
             string line = String.Empty;
