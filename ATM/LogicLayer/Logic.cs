@@ -99,9 +99,30 @@ namespace ATM.LogicLayer
 
                 data.OnIsInFile(user);
                 //data.OnVerifyLogin(customer);
-                
 
-            getHolder:
+                Console.WriteLine("User account type: ");
+                Console.Write("1---- User\n");
+                Console.Write("2---- Admin\n");
+
+            getUserType:
+
+                var pressedKey = Console.ReadKey(intercept: true);
+                var key = pressedKey.Key;
+
+                if (key == ConsoleKey.D1)
+                {
+                    user.IsAdmin = false;
+                }
+                else if (key == ConsoleKey.D2)
+                {
+                    user.IsAdmin = true;
+                    data.AddtoFile<User>(user);
+                    loop = false;
+                }
+                else
+                    goto getUserType;
+
+                getHolder:
 
                 Console.Write("Holders name: ");
                 customer.Name  = Console.ReadLine();
