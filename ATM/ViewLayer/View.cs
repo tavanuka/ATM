@@ -57,6 +57,11 @@ namespace ATM.ViewLayer
                         {
                             AdminScreen();
                         }
+                        else //(args is User customer && !customer.IsAdmin)
+                        {
+                            
+                            CustomerScreen((User)args, true);
+                        }
                     };
                     //data.OnVerifyLogin(userLogin);
                     data.OnIsInFile(userLogin);
@@ -93,7 +98,49 @@ namespace ATM.ViewLayer
         */
         private void CustomerScreen(User user, bool signedIn)
         {
-            throw new NotImplementedException();
+            ConsoleKey key;
+            user.IsSignedIn = signedIn;
+
+            Console.Clear();
+            Console.WriteLine("   ----BANK OF M8IT----");
+            Console.WriteLine("  Customer account\n\n");
+            Console.WriteLine("1----Cash Withdrawal\n" +
+                                  "2----Cash Transfer \n" +
+                                  "3----Cash deposit\n" +
+                                  "4----Display Balance\n" +
+                                  "5----Exit");
+
+            
+            do
+            {
+                var keyPressed = Console.ReadKey(intercept: true);
+                key = keyPressed.Key;
+                if (key == ConsoleKey.D1 || key == ConsoleKey.D2 || key == ConsoleKey.D3 || key == ConsoleKey.D4 || key == ConsoleKey.D5 )
+                {
+                    switch (key)
+                    {
+                        case ConsoleKey.D1:
+
+                            break;
+                        case ConsoleKey.D2:
+                            
+                            break;
+                        case ConsoleKey.D3:
+                            
+                            break;
+                        case ConsoleKey.D4:
+                            break;
+                        case ConsoleKey.D5:
+                            user.IsSignedIn = false;
+
+                            System.Environment.Exit(0);
+                            break;
+                        
+                    }
+                }
+                
+
+            } while (user.IsSignedIn is false);
         }
 
         private void AdminScreen()
