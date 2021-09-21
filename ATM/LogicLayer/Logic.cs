@@ -6,6 +6,7 @@ using BO;
 using ATM.DataLayer;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.IO;
 
 namespace ATM.LogicLayer
 {
@@ -175,9 +176,42 @@ namespace ATM.LogicLayer
             {
                 throw new Exception(ex.Message, ex.InnerException);
             }
+
+          
+
+        }
+        public void FileEncryption(string source, string output)
+        {
+            using (var sourceStream = File.OpenRead(source))
+            using (var destinationStream = File.Create(output))
+            using (var provider = GetAes())
+
+            using (var cryptoTransform = provider.CreateEncryptor())
+            using (var cryptoStream = new CryptoStream(destinationStream, cryptoTransform, CryptoStreamMode.Write))
+            {
+
+                destinationStream.Write(provider.IV, 0, provider.IV.Length);
+                sourceStream.CopyTo(cryptoStream);
+                Console.WriteLine(Convert.ToBase64String(provider.Key));
+            }
+        }
+        public void FileDecryption(string source, string output, string key)
+        {
             
             
-            
+            using (var sourceStream = File.OpenRead(source))
+            using (var destinationStream = File.Create(output))
+            using (var provider = GetAes())
+            {
+               
+                var IV = new byte[provider.IV.Length];
+                sourceStream.Read(IV, 0, IV.Length);
+                using (var cryptoTransform = provider.CreateDecryptor(provider.Key, provider.IV))
+                using (var cryptoStream = new CryptoStream(sourceStream, cryptoTransform, CryptoStreamMode.Read))
+                {
+                    cryptoStream.CopyTo(destinationStream);
+                }
+            }
         }
     }
 }

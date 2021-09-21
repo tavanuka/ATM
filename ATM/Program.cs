@@ -15,11 +15,11 @@ namespace ATM
             Logic logic = new Logic();
             ////Console.WriteLine(logic.IsValidPin(test));
             var add = new Data();
-           // var admin = new User() { Username = logic.Encrypt("tavanuka"), Pin = logic.Encrypt("12345"), IsAdmin = true };
-            
-           // add.AddtoFile(admin);
+            // var admin = new User() { Username = logic.Encrypt("tavanuka"), Pin = logic.Encrypt("12345"), IsAdmin = true };
 
-
+            // add.AddtoFile(admin);
+            //logic.FileEncryption(add.GetFilePath("customer.txt"),add.GetFilePath("encrypted.key"));
+            logic.FileDecryption(add.GetFilePath("encrypted.key"), add.GetFilePath("customer_decrypted.txt"), "bm92YWsAAAAAAAAAAAAAAA==");
             View Login = new View();
 
             Login.LoginScreen();

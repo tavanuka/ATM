@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using BO;
 using ATM.LogicLayer;
+using System.Security.Cryptography;
 
 namespace ATM.DataLayer
 {
@@ -20,7 +21,7 @@ namespace ATM.DataLayer
         private readonly string userFile = "user.txt";
 
         //Helper method to get current file path
-        private string GetFilePath(string filePath)
+        public string GetFilePath(string filePath)
         {
             return Path.Combine(Environment.CurrentDirectory, filePath);
         }
@@ -114,7 +115,7 @@ namespace ATM.DataLayer
             return 0;
         }
        
-
+      
 
     }
 
