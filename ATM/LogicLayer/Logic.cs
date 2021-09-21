@@ -138,8 +138,8 @@ namespace ATM.LogicLayer
             
             getAccountType:
 
-                var pressedKey = Console.ReadKey(intercept: true);
-                var key = pressedKey.Key;
+                pressedKey = Console.ReadKey(intercept: true);
+                key = pressedKey.Key;
                
                 if (key == ConsoleKey.D1)
                 {

@@ -97,9 +97,9 @@ namespace ATM.DataLayer
             List<Customer> list = ReadFile<Customer>(customerFile);
             if (list.Count > 0)
             {
-                Customer customer = list[list.Count - 1];
-                return customer.accountNumber;
-            }
+                int result = list.Count - 1;
+                return result;
+            }else 
             return 0;
         }
        
