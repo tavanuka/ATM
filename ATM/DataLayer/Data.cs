@@ -117,17 +117,17 @@ namespace ATM.DataLayer
             return 0;
         }
 
-        public Customer GetCustomer(string customer)
+        public object GetCustomer(string customer)
         {
             List<Customer> customers = ReadFile<Customer>(customerFile);
             int accNumber =GetAccountNumber(customer);
+
             foreach(Customer _customer in customers)
             {
                 if (_customer.accountNumber == accNumber)
                 {
                     return _customer;
                 }
-                else return null;
             }
             return null;
         }

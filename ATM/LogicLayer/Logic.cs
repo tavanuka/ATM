@@ -136,37 +136,38 @@ namespace ATM.LogicLayer
                 Console.Write("Enter the account username you want to change: ");
                     
                 var _customer = Console.ReadLine();
-                customer = data.GetCustomer(_customer);
+                customer = (Customer)data.GetCustomer(_customer);
                
                 if (customer is null)
                 {
                     Console.WriteLine("the account does not exist or you have entered the wrong username. please try again.");
                 }
-                else
-                    continue;
+
                 
-                Console.Write($"Name: Current({0}) ", customer.Name);
+                Console.Write("Name: Current({0}) ", customer.Name);
                 string _name = Console.ReadLine();
                 if (!String.IsNullOrWhiteSpace(_name))
                 {
                     customer.Name = _name;
                 }
 
-                Console.WriteLine($"Account Type: Current({0})", customer.accountType);
+                Console.WriteLine("Account Type: Current({0}) ", customer.accountType);
                 customer.accountType = get.AccountType();
 
-                Console.Write($"Balance: Current({0})", customer.Balance);
+                Console.Write("Balance: Current({0})", customer.Balance);
                 string _balance = Console.ReadLine();
                 if (!String.IsNullOrWhiteSpace(_balance))
                 {
                     customer.Balance = Convert.ToInt32(_balance);
                 }
 
-                Console.WriteLine($"Account Status: Current({0})", Convert.ToString(customer.Status));
+                Console.WriteLine("Account Status: Current({0})", Convert.ToString(customer.Status));
 
                 customer.Status = get.AccountStatus();
 
-                Console.WriteLine($"The account with username {0} and ID {1} has been successfully updated.", _customer, customer.accountNumber);
+                // Implement edit of the list and overwriting the data without adding the user double.
+
+                Console.WriteLine("The account with username {0} and ID {1} has been successfully updated.", _customer, customer.accountNumber);
                 break;
 
             }
