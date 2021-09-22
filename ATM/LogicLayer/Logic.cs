@@ -121,9 +121,15 @@ namespace ATM.LogicLayer
         // (master)
         public void UpdateAccount()
         {
+            var data = new Data();
+            List<User> users = data.ReadFile<User>("user.txt");
+            foreach(User user in users)
+            {
+                Console.WriteLine(Decrypt(user.Username)+" admin: "+user.IsAdmin);           
+            }
             while (true)
             {
-                var data = new Data();
+                
                 Customer customer = new Customer();
                 var get = new UserCreation();
 
@@ -137,7 +143,7 @@ namespace ATM.LogicLayer
                     Console.WriteLine("the account does not exist or you have entered the wrong username. please try again.");
                 }
                 else
-                    break;
+                    continue;
                 
                 Console.Write($"Name: Current({0}) ", customer.Name);
                 string _name = Console.ReadLine();
