@@ -102,7 +102,37 @@ namespace ATM.DataLayer
             
         }
 
-        //Gets the account number for the new assignment.
+        // Gets the account number of the given user. Utilizes User database 
+        public int GetAccountNumber(string customer)
+        {
+            var logic = new Logic();
+            List<User> list = ReadFile<User>(userFile);
+            foreach(User user in list)
+            {
+                if(logic.Decrypt(user.Username) == customer)
+                {
+                    return user.accountNumber;
+                }
+            }
+            return 0;
+        }
+
+        public Customer GetCustomer(string customer)
+        {
+            List<Customer> customers = ReadFile<Customer>(customerFile);
+            int accNumber =GetAccountNumber(customer);
+            foreach(Customer _customer in customers)
+            {
+                if (_customer.accountNumber == accNumber)
+                {
+                    return _customer;
+                }
+                else return null;
+            }
+            return null;
+        }
+
+        // Gets the account number for the new assignment.
         // should be used only as creating new accounts!!
         public int GetLastAccountNumber()
         {

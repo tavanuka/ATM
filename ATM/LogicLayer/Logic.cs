@@ -14,32 +14,32 @@ namespace ATM.LogicLayer
     public class Logic
     {
 
-        
 
-        
+
+
         // User validation method that uses Regular expression to determine if the string is in correct format
         public bool IsValidUsername(string username)
         {
-            
-                if (Regex.IsMatch(username, "[a-zA-Z0-9]"))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+
+            if (Regex.IsMatch(username, "[a-zA-Z0-9]"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         // Password validation method that uses the same algorithm as IsValidUsername to determine if the varaible is in correct format 
         public bool IsValidPin(string pin)
         {
 
-            if(pin.Length != 5)
+            if (pin.Length != 5)
             {
                 return false;
             }
-            else if(Regex.IsMatch(pin, "[0-9]"))
+            else if (Regex.IsMatch(pin, "[0-9]"))
             {
                 return true;
             }
@@ -60,7 +60,7 @@ namespace ATM.LogicLayer
             Console.Clear();
             Console.WriteLine("   ----Creating new Account----");
 
-        while(true)
+            while (true)
             {
 
                 // Event Subscriber that triggers if the given username already exists
@@ -70,10 +70,10 @@ namespace ATM.LogicLayer
                     {
                         Console.WriteLine("This user already exists. Please try again!");
                         Thread.Sleep(1200);
-                        
+
                         CreateAccount();
                     }
-                    
+
                 };
 
                 // User() assignment and encryption with AES 
@@ -117,9 +117,39 @@ namespace ATM.LogicLayer
             throw new NotImplementedException();
         }
 
+        // Updates CUSTOMER accounts. admin accounts have to be added manually via an pre-existing administration 
+        // (master)
         public void UpdateAccount()
         {
-            throw new NotImplementedException();
+            while (true)
+            {
+                    var data = new Data();
+                    var customer = new Customer();
+                    Console.Write("Enter the account username you want to change: ");
+                    var _customer = Console.ReadLine();
+                    customer = data.GetCustomer(_customer);
+                try
+                {
+                    if (accNumber == 0)
+                    {
+                        Console.WriteLine("the account does not exist or you have entered the wrong username. please try again.");
+                    }
+                    else
+                        break;
+                }
+                catch (Exception ex)
+                {
+
+                    throw new Exception(ex.Message, ex.InnerException);
+                }
+                Console.WriteLine("Name: ");
+
+            }
+            while (true)
+            {
+
+            }
+            
         }
 
 
@@ -134,10 +164,10 @@ namespace ATM.LogicLayer
 
             // Returns encrypted string to the source 
             return Convert.ToBase64String(encrypted);
-            
+
         }
 
-        public string Decrypt(string encrypted) 
+        public string Decrypt(string encrypted)
         {
             var b = Convert.FromBase64String(encrypted);
             var decrypted = GetAes().CreateDecryptor().TransformFinalBlock(b, 0, b.Length);
@@ -159,7 +189,7 @@ namespace ATM.LogicLayer
 
                 // Converting the secret key to byte encoding .
                 var skeyByte = Encoding.UTF8.GetBytes(secretkey);
-                
+
                 // Copies all the bytes in the private key into the public key, and sets length with math.min.
                 Array.Copy(skeyByte, publickey, Math.Min(publickey.Length, skeyByte.Length));
                 Aes aes = Aes.Create();
@@ -172,7 +202,7 @@ namespace ATM.LogicLayer
 
                 return aes;
             }
-            
+
             catch (Exception ex)
             {
                 throw new Exception(ex.Message, ex.InnerException);
@@ -203,12 +233,12 @@ namespace ATM.LogicLayer
 
         public void FileDecryption(string source, string output, string key)
         {
-            
+
             using (var sourceStream = File.OpenRead(source))
             using (var destinationStream = File.Create(output))
             using (var provider = GetAes())
             {
-               
+
                 var IV = new byte[provider.IV.Length];
                 sourceStream.Read(IV, 0, IV.Length);
                 using (var cryptoTransform = provider.CreateDecryptor(Convert.FromBase64String(key), IV))
