@@ -146,6 +146,7 @@ namespace ATM.LogicLayer
         }
 
         // AES init
+        // Improve the AES code and generation of it to be a bit more fool proof 
         private Aes GetAes()
         {
             try
@@ -189,6 +190,8 @@ namespace ATM.LogicLayer
 
                 destinationStream.Write(provider.IV, 0, provider.IV.Length);
                 sourceStream.CopyTo(cryptoStream);
+
+                // Return the key of the encryption
                 Console.WriteLine(Convert.ToBase64String(provider.Key));
             }
         }
