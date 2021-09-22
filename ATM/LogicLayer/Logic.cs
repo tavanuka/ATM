@@ -123,33 +123,47 @@ namespace ATM.LogicLayer
         {
             while (true)
             {
-                    var data = new Data();
-                    var customer = new Customer();
-                    Console.Write("Enter the account username you want to change: ");
-                    var _customer = Console.ReadLine();
-                    customer = data.GetCustomer(_customer);
-                try
-                {
-                    if (accNumber == 0)
-                    {
-                        Console.WriteLine("the account does not exist or you have entered the wrong username. please try again.");
-                    }
-                    else
-                        break;
-                }
-                catch (Exception ex)
-                {
+                var data = new Data();
+                Customer customer = new Customer();
+                var get = new UserCreation();
 
-                    throw new Exception(ex.Message, ex.InnerException);
+                Console.Write("Enter the account username you want to change: ");
+                    
+                var _customer = Console.ReadLine();
+                customer = data.GetCustomer(_customer);
+               
+                if (customer is null)
+                {
+                    Console.WriteLine("the account does not exist or you have entered the wrong username. please try again.");
                 }
-                Console.WriteLine("Name: ");
+                else
+                    break;
+                
+                Console.Write($"Name: Current({0}) ", customer.Name);
+                string _name = Console.ReadLine();
+                if (!String.IsNullOrWhiteSpace(_name))
+                {
+                    customer.Name = _name;
+                }
+
+                Console.WriteLine($"Account Type: Current({0})", customer.accountType);
+                customer.accountType = get.AccountType();
+
+                Console.Write($"Balance: Current({0})", customer.Balance);
+                string _balance = Console.ReadLine();
+                if (!String.IsNullOrWhiteSpace(_balance))
+                {
+                    customer.Balance = Convert.ToInt32(_balance);
+                }
+
+                Console.WriteLine($"Account Status: Current({0})", Convert.ToString(customer.Status));
+
+                customer.Status = get.AccountStatus();
+
+                Console.WriteLine($"The account with username {0} and ID {1} has been successfully updated.", _customer, customer.accountNumber);
+                break;
 
             }
-            while (true)
-            {
-
-            }
-            
         }
 
 
