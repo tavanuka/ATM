@@ -132,19 +132,25 @@ namespace ATM.LogicLayer
                 
                 Customer customer = new Customer();
                 var get = new UserCreation();
-
+                getCustomer:
                 Console.Write("Enter the account username you want to change: ");
-                    
+                  
                 var _customer = Console.ReadLine();
-                customer = (Customer)data.GetCustomer(_customer);
-               
-                if (customer is null)
-                {
-                    Console.WriteLine("the account does not exist or you have entered the wrong username. please try again.");
-                }
+ 
 
+                    customer = (Customer)data.GetCustomer(_customer);
+
+                if (customer != null)
+                {
+                    Console.Write("Name: Current({0}) ", customer.Name); 
+                }
+                else
+                {
+                    Console.WriteLine("Customer you entered does not exist or is an admin. please try again");
+                    goto getCustomer;
+                }
                 
-                Console.Write("Name: Current({0}) ", customer.Name);
+
                 string _name = Console.ReadLine();
                 if (!String.IsNullOrWhiteSpace(_name))
                 {
@@ -165,8 +171,7 @@ namespace ATM.LogicLayer
 
                 customer.Status = get.AccountStatus();
 
-                // Implement edit of the list and overwriting the data without adding the user double.
-
+                data.WritetoFile(customer);
                 Console.WriteLine("The account with username {0} and ID {1} has been successfully updated.", _customer, customer.accountNumber);
                 break;
 

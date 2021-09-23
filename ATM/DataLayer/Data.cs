@@ -43,6 +43,24 @@ namespace ATM.DataLayer
             return list;
         }
 
+        public void WritetoFile(Customer customer)
+        {
+            var customers = ReadFile<Customer>(customerFile);
+            if(customers.Exists(x => x.accountNumber == customer.accountNumber))
+            {
+                string jsonOutput = "";
+                customers.Remove(customers.Find(x => x.accountNumber == customer.accountNumber));
+                customers.Add(customer);
+                File.Delete(GetFilePath(customerFile));
+                foreach (Customer _customer in customers)
+                {
+                   jsonOutput = JsonSerializer.Serialize(_customer);
+                    
+                    File.AppendAllText(GetFilePath(customerFile), jsonOutput + Environment.NewLine);
+                }
+                
+            }
+        }
         //Adds the given account type to the right database
         public void AddtoFile<T>(T obj)
         {
@@ -50,11 +68,11 @@ namespace ATM.DataLayer
             string jsonOutput = JsonSerializer.Serialize(obj);
             if (obj is User)
             {
-                File.AppendAllText(Path.Combine(Environment.CurrentDirectory, userFile), jsonOutput + Environment.NewLine);
+                File.AppendAllText(GetFilePath(userFile), jsonOutput + Environment.NewLine);
             }
             else if (obj is Customer)
             {
-                File.AppendAllText(Path.Combine(Environment.CurrentDirectory, customerFile), jsonOutput + Environment.NewLine);
+                File.AppendAllText(GetFilePath(customerFile), jsonOutput + Environment.NewLine);
             }
         }
 
