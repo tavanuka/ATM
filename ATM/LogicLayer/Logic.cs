@@ -7,6 +7,7 @@ using ATM.DataLayer;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace ATM.LogicLayer
 {
@@ -87,8 +88,12 @@ namespace ATM.LogicLayer
                 // if true, it will directly write the credentials and exit the loop, as no further data is needed
                 if ((user.IsAdmin = get.CustomerAccountType()))
                 {
+                    user.accountNumber = data.GetLastAccountNumber();
                     data.AddtoFile<User>(user);
+                    Console.WriteLine($"User {0} successfully added.", user.Username);
+                    Task.Delay(1000);
                     break;
+                    
                 }
 
                 // object Customer() variables assignment through class UserCreation
