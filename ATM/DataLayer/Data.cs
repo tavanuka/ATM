@@ -71,7 +71,7 @@ namespace ATM.DataLayer
                 File.AppendAllText(GetFilePath(userFile), jsonOutput + Environment.NewLine);
             }
             else if (obj is Customer)
-            {
+            {                
                 File.AppendAllText(GetFilePath(customerFile), jsonOutput + Environment.NewLine);
             }
         }
@@ -109,7 +109,7 @@ namespace ATM.DataLayer
         public void OnIsInFile(User user)
         {
             var userList = ReadFile<User>(userFile);
-            var customerList = ReadFile<Customer>(customerFile);
+           // var customerList = ReadFile<Customer>(customerFile);
             foreach (User un in userList)
             {
                 if (un.Username == user.Username && un.Pin == user.Pin)
@@ -154,18 +154,13 @@ namespace ATM.DataLayer
         // should be used only as creating new accounts!!
         public int GetLastAccountNumber()
         {
-            List<Customer> list = ReadFile<Customer>(customerFile);
+            List<User> list = ReadFile<User>(userFile);        
             if (list.Count > 0)
             {
-                int result = list.Count - 1;
-                return result;
+                var index = list[list.Count-1].accountNumber + 1;
+                return index;
             }else 
             return 0;
         }
-       
-      
-
     }
-
-    
 }
