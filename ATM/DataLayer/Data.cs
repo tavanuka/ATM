@@ -6,6 +6,7 @@ using System.Text.Json;
 using BO;
 using ATM.LogicLayer;
 using System.Security.Cryptography;
+using System.Linq;
 
 namespace ATM.DataLayer
 {
@@ -48,9 +49,10 @@ namespace ATM.DataLayer
             var customers = ReadFile<Customer>(customerFile);
             if(customers.Exists(x => x.accountNumber == customer.accountNumber))
             {
-                string jsonOutput = "";
+                string jsonOutput = "";               
                 customers.Remove(customers.Find(x => x.accountNumber == customer.accountNumber));
                 customers.Add(customer);
+                customers.Sort((x, y) => x.accountNumber.CompareTo(y.accountNumber));
                 File.Delete(GetFilePath(customerFile));
                 foreach (Customer _customer in customers)
                 {
